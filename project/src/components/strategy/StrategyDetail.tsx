@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   Star, 
   Users, 
@@ -24,18 +24,23 @@ import {
 } from 'lucide-react';
 import { mockStrategies, mockReviews, mockVersions } from '../../data/mockData';
 import { useStore } from '../../store/useStore';
+import { useAuth } from '../../contexts/AuthContext';
 import PerformanceDashboard from '../dashboard/PerformanceDashboard';
 import BacktestPlayer from '../backtest/BacktestPlayer';
 import BrokerIntegration from '../broker/BrokerIntegration';
 import ReviewsSection from './ReviewsSection';
 import VersionHistory from './VersionHistory';
 import AIRatingCard from './AIRatingCard';
+import CheckoutModal from '../checkout/CheckoutModal';
 
 export default function StrategyDetail() {
   const { id } = useParams<{ id: string }>();
-  const { addToFavorites, removeFromFavorites, isFavorite, addToCompare, isInCompare } = useStore();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { addToFavorites, removeFromFavorites, isFavorite, addToCompare, isInCompare, isSubscribed } = useStore();
   
   const [activeTab, setActiveTab] = useState<'overview' | 'performance' | 'backtest' | 'trading' | 'reviews' | 'versions'>('overview');
+  const [showCheckout, setShowCheckout] = useState(false);
 
   const strategy = useMemo(() => mockStrategies.find(s => s.id === id), [id]);
 
@@ -56,6 +61,15 @@ export default function StrategyDetail() {
   const sixMonthPerf = strategy.performance.find(p => p.period === '6M');
   const favorite = isFavorite(strategy.id);
   const inCompare = isInCompare(strategy.id);
+  const subscribed = isSubscribed(strategy.id);
+
+  const handleSubscribe = () => {
+    if (!user) {
+      navigate('/login', { state: { from: `/strategy/${strategy.id}` } });
+      return;
+    }
+    setShowCheckout(true);
+  };
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: Activity },
@@ -152,9 +166,20 @@ export default function StrategyDetail() {
                   </div>
                 </div>
 
-                <button className="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors mb-3">
-                  Subscribe Now
-                </button>
+                {subscribed ? (
+                  <div className="w-full py-3 bg-emerald-500/20 text-emerald-400 font-semibold rounded-lg mb-3 flex items-center justify-center gap-2">
+                    <CheckCircle2 className="w-5 h-5" />
+                    Subscribed
+                  </div>
+                ) : (
+                  <button 
+                    onClick={handleSubscribe}
+                    className="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-colors mb-3 flex items-center justify-center gap-2"
+                  >
+                    <Zap className="w-5 h-5" />
+                    Subscribe Now
+                  </button>
+                )}
 
                 <div className="flex items-center gap-2">
                   <button
@@ -365,7 +390,21 @@ export default function StrategyDetail() {
           <VersionHistory versions={mockVersions} />
         )}
       </div>
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        isOpen={showCheckout}
+        onClose={() => setShowCheckout(false)}
+        strategy={{
+          id: strategy.id,
+          name: strategy.name,
+          creator_name: strategy.creator_name,
+          creator_avatar: strategy.creator_avatar,
+          price_monthly: strategy.price_monthly,
+          rating: strategy.rating,
+          total_subscribers: strategy.total_subscribers,
+        }}
+      />
     </div>
   );
 }
-

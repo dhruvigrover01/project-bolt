@@ -5,6 +5,21 @@ import {
   Watchlist, 
 } from '../types';
 
+// Subscription type
+export interface Subscription {
+  id: string;
+  strategyId: string;
+  strategyName: string;
+  creatorName: string;
+  creatorAvatar: string;
+  priceMonthly: number;
+  status: 'active' | 'cancelled' | 'expired';
+  startDate: string;
+  nextBillingDate: string;
+  paymentMethod: string;
+  lastFourDigits: string;
+}
+
 interface AppStore {
   // Theme
   theme: 'light' | 'dark';
@@ -24,12 +39,21 @@ interface AppStore {
   favorites: string[];
   addToFavorites: (strategyId: string) => void;
   removeFromFavorites: (strategyId: string) => void;
+  toggleFavorite: (strategyId: string) => void;
   isFavorite: (strategyId: string) => boolean;
   setFavorites: (favorites: string[]) => void;
   createWatchlist: (watchlist: Watchlist) => void;
   addToWatchlist: (watchlistId: string, strategyId: string) => void;
   removeFromWatchlist: (watchlistId: string, strategyId: string) => void;
   setWatchlists: (watchlists: Watchlist[]) => void;
+
+  // Subscriptions
+  subscriptions: Subscription[];
+  addSubscription: (subscription: Subscription) => void;
+  removeSubscription: (subscriptionId: string) => void;
+  cancelSubscription: (subscriptionId: string) => void;
+  isSubscribed: (strategyId: string) => boolean;
+  getSubscription: (strategyId: string) => Subscription | undefined;
 
   // Compare
   compareList: string[];
@@ -60,6 +84,7 @@ const initialState = {
   unreadCount: 0,
   watchlists: [],
   favorites: [],
+  subscriptions: [],
   compareList: [],
   sidebarOpen: true,
   modalOpen: null,
@@ -105,6 +130,11 @@ export const useStore = create<AppStore>()(
       removeFromFavorites: (strategyId) => set((state) => ({
         favorites: state.favorites.filter((id) => id !== strategyId),
       })),
+      toggleFavorite: (strategyId) => set((state) => ({
+        favorites: state.favorites.includes(strategyId)
+          ? state.favorites.filter((id) => id !== strategyId)
+          : [...state.favorites, strategyId],
+      })),
       isFavorite: (strategyId) => get().favorites.includes(strategyId),
       setFavorites: (favorites) => set({ favorites }),
       createWatchlist: (watchlist) => set((state) => ({
@@ -125,6 +155,23 @@ export const useStore = create<AppStore>()(
         ),
       })),
       setWatchlists: (watchlists) => set({ watchlists }),
+
+      // Subscriptions
+      addSubscription: (subscription) => set((state) => ({
+        subscriptions: [...state.subscriptions, subscription],
+      })),
+      removeSubscription: (subscriptionId) => set((state) => ({
+        subscriptions: state.subscriptions.filter((s) => s.id !== subscriptionId),
+      })),
+      cancelSubscription: (subscriptionId) => set((state) => ({
+        subscriptions: state.subscriptions.map((s) =>
+          s.id === subscriptionId ? { ...s, status: 'cancelled' as const } : s
+        ),
+      })),
+      isSubscribed: (strategyId) => 
+        get().subscriptions.some((s) => s.strategyId === strategyId && s.status === 'active'),
+      getSubscription: (strategyId) => 
+        get().subscriptions.find((s) => s.strategyId === strategyId),
 
       // Compare
       addToCompare: (strategyId) => set((state) => {
@@ -162,12 +209,14 @@ export const useStore = create<AppStore>()(
         watchlists: state.watchlists,
         recentSearches: state.recentSearches,
         compareList: state.compareList,
+        subscriptions: state.subscriptions,
       }),
     }
   )
-);export const demoUser = {
+);
+
+export const demoUser = {
   id: "demo-1",
   name: "Demo User",
   email: "demo@algomart.com",
 };
-

@@ -25,6 +25,7 @@ import NotificationCenter from './components/notifications/NotificationCenter';
 import AffiliateCenter from './components/affiliate/AffiliateCenter';
 import FavoritesPage from './pages/FavoritesPage';
 import SettingsPage from './pages/SettingsPage';
+import UserDashboard from './pages/UserDashboard';
 
 function App() {
   return (
@@ -61,7 +62,12 @@ function App() {
             } />
             <Route path="dashboard" element={
               <ProtectedRoute>
-                <CreatorDashboard />
+                <UserDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="my-dashboard" element={
+              <ProtectedRoute>
+                <UserDashboard />
               </ProtectedRoute>
             } />
             <Route path="simulator" element={

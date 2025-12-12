@@ -6,7 +6,6 @@ import {
   Users, 
   TrendingUp, 
   ArrowRight,
-  Trash2,
   ExternalLink
 } from 'lucide-react';
 import { useStore } from '../store/useStore';
@@ -15,8 +14,10 @@ import { mockStrategies } from '../data/mockData';
 export default function FavoritesPage() {
   const { favorites, toggleFavorite } = useStore();
   
-  // Get favorite strategies from mock data
-  const favoriteStrategies = mockStrategies.filter(s => favorites.includes(s.id));
+  // Get favorite strategies from mock data - filter out any that don't exist
+  const favoriteStrategies = favorites
+    .map(id => mockStrategies.find(s => s.id === id))
+    .filter((s): s is typeof mockStrategies[0] => s !== undefined);
 
   return (
     <div className="min-h-screen bg-slate-950 pt-20 pb-12">
@@ -48,15 +49,15 @@ export default function FavoritesPage() {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <img
-                        src={strategy.creator.avatar_url}
-                        alt={strategy.creator.name}
+                        src={strategy.creator_avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'}
+                        alt={strategy.creator_name || 'Creator'}
                         className="w-10 h-10 rounded-lg object-cover"
                       />
                       <div>
                         <h3 className="font-semibold text-white group-hover:text-emerald-400 transition-colors">
                           {strategy.name}
                         </h3>
-                        <p className="text-sm text-slate-400">{strategy.creator.name}</p>
+                        <p className="text-sm text-slate-400">{strategy.creator_name || 'Unknown Creator'}</p>
                       </div>
                     </div>
                     <button
@@ -84,14 +85,16 @@ export default function FavoritesPage() {
                     </div>
                     <div className="flex items-center gap-1 text-emerald-400">
                       <TrendingUp className="w-4 h-4" />
-                      <span className="font-bold">+{strategy.performance[1]?.roi_percentage}%</span>
+                      <span className="font-bold">
+                        +{strategy.performance?.[1]?.roi_percentage ?? strategy.performance?.[0]?.roi_percentage ?? 0}%
+                      </span>
                     </div>
                   </div>
 
                   {/* Price */}
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="text-2xl font-bold text-white">${strategy.price}</span>
+                      <span className="text-2xl font-bold text-white">${strategy.price_monthly}</span>
                       <span className="text-slate-400 text-sm">/mo</span>
                     </div>
                     <Link
