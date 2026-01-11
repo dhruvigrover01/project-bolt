@@ -1,4 +1,4 @@
-# Project Bolt (Tau Edition) ⚡
+# Project Bolt (Tau Edition)
 
 [![Vercel Deployment](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat-square&logo=vercel)](https://project-bolt-tau.vercel.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -10,12 +10,12 @@ This repository features the **Tau Edition**, focusing on enhanced speed, modula
 
 ---
 
-## 🚀 Live Demo
+## Live Demo
 Access the platform here: **[project-bolt-tau.vercel.app](https://project-bolt-tau.vercel.app/)**
 
 ---
 
-## 🧩 My Contribution: [Insert Addon Name]
+## My Contribution: [Insert Addon Name]
 This repository includes my custom addon contribution designed to extend the capabilities of the Bolt ecosystem.
 
 ### **Features of the Addon:**
@@ -29,7 +29,7 @@ This repository includes my custom addon contribution designed to extend the cap
 
 ---
 
-## ✨ Core Features
+## Core Features
 *   **Prompt-to-Code:** Generate functional React, Next.js, and Vite projects using AI.
 *   **In-Browser Runtime:** Run Node.js and preview apps instantly using WebContainer technology.
 *   **AI Pair Programming:** Chat with the AI to refactor code, fix bugs, and add new routes in real-time.
@@ -38,7 +38,7 @@ This repository includes my custom addon contribution designed to extend the cap
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 *   **Frontend:** React, Tailwind CSS, Lucide Icons, Radix UI.
 *   **Runtime:** [StackBlitz WebContainers](https://webcontainers.io/).
 *   **AI Engine:** Claude 3.5 Sonnet / GPT-4o / [Custom Addon Models].
@@ -46,7 +46,7 @@ This repository includes my custom addon contribution designed to extend the cap
 
 ---
 
-## ⚙️ Getting Started
+## Getting Started
 
 ### Prerequisites
 *   Node.js (v18.x or higher)
@@ -57,7 +57,7 @@ This repository includes my custom addon contribution designed to extend the cap
 
 1. **Clone the repo:**
    ```bash
-   git clone https://github.com/[Your-Username]/project-bolt-tau.git
+   git clone https://github.com/dhruvigrover01/project-bolt-tau.git
    cd project-bolt-tau
 
 <!-- Installation Section -->
@@ -67,7 +67,7 @@ This repository includes my custom addon contribution designed to extend the cap
 
 <!-- Environment Configuration -->
 <section>
-  <h3>⚙️ Configuration</h3>
+  <h3>Configuration</h3>
   <p>Create a <code>.env</code> file and add the following:</p>
   <pre><code>ANTHROPIC_API_KEY=your_api_key_here
 VITE_LOG_LEVEL=info</code></pre>
@@ -77,7 +77,7 @@ VITE_LOG_LEVEL=info</code></pre>
 
 <!-- Contributing Section -->
 <section>
-  <h2>🤝 Contributing</h2>
+  <h2>Contributing</h2>
   <p>Contributions are what make the open-source community an amazing place to learn and create. To contribute:</p>
   <ol>
     <li><strong>Fork</strong> the Project</li>
@@ -92,7 +92,7 @@ VITE_LOG_LEVEL=info</code></pre>
 
 <!-- License Section -->
 <section>
-  <h2>📄 License</h2>
+  <h2>License</h2>
   <p>This project is licensed under the <strong>MIT License</strong> - see the <code>LICENSE</code> file for details.</p>
 </section>
 
@@ -100,10 +100,9 @@ VITE_LOG_LEVEL=info</code></pre>
 
 <!-- Contact Section -->
 <section>
-  <h2>👤 Contact</h2>
+  <h2>Contact</h2>
   <p>
-    <strong>Your Name</strong><br />
-    GitHub: <a href="https://github.com/your-username">@your-username</a><br />
-    Project Link: <a href="https://project-bolt-tau.vercel.app/">project-bolt-tau.vercel.app</a>
+    GitHub: <a href="https://github.com/dhruvigrover01">@dhruvigrover01</a><br />
+    Project Link: <a href="https://project-bolt-tau.vercel.app/">Bolt-Tau</a>
   </p>
 </section>
