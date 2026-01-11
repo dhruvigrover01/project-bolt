@@ -26,11 +26,13 @@ import AffiliateCenter from './components/affiliate/AffiliateCenter';
 import FavoritesPage from './pages/FavoritesPage';
 import SettingsPage from './pages/SettingsPage';
 import UserDashboard from './pages/UserDashboard';
+import ScrollToTop from './components/common/ScrollToTop';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           {/* Auth Routes - No Layout */}
           <Route path="/login" element={<LoginPage />} />
@@ -48,7 +50,7 @@ function App() {
             <Route path="leaderboard" element={<Leaderboard />} />
             <Route path="compare" element={<StrategyComparison />} />
             <Route path="pricing" element={<SubscriptionPlans />} />
-            
+
             {/* Protected Routes - Require Authentication */}
             <Route path="profile" element={
               <ProtectedRoute>
