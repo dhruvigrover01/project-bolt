@@ -99,20 +99,12 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const isDemo = true;
+  const isDemo = false;
 
-  // Initialize with demo user
-  const [user, setUser] = useState<User | null>({
-    id: 'demo-user-1',
-    email: 'demo@algomart.com',
-    aud: 'authenticated',
-    role: 'authenticated',
-    app_metadata: {},
-    user_metadata: { name: 'Alex Thompson' },
-    created_at: '2023-06-15',
-  } as User);
+  // Initialize with null user and profile
+  const [user, setUser] = useState<User | null>(null);
   
-  const [profile, setProfile] = useState<UserProfile | null>(defaultDemoProfile);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading] = useState(false);
 
