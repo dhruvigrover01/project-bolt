@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   User, 
@@ -38,6 +38,27 @@ export default function UserProfile() {
   const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
   
+  // Redirect if not authenticated
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (!profile) {
+      navigate('/login');
+    }
+  }, [profile, navigate]);
+  
+  // Return loading state if profile is not loaded
+  if (!profile) {
+    return (
+      <div className="min-h-screen bg-slate-950 pt-20 pb-12 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mx-auto"></div>
+          <p className="text-slate-400 mt-4">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
+  
   // Edit form state
   const [editForm, setEditForm] = useState({
     name: profile?.name || '',
@@ -60,39 +81,8 @@ export default function UserProfile() {
     }
   }, [profile]);
 
-  // Use profile from auth or fallback to demo
-  const user = profile || {
-    id: 'demo-1',
-    name: 'Demo User',
-    email: 'demo@algomart.com',
-    avatar_url: 'https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&w=150',
-    bio: 'Quantitative trader with 8+ years of experience in algorithmic trading.',
-    location: 'New York, USA',
-    website: 'https://alexthompson.dev',
-    twitter: '@alextrader',
-    joined_at: '2023-06-15',
-    subscription_tier: 'trader_pro',
-    badges: [
-      { id: '1', name: 'Early Adopter', description: 'Joined during beta', icon: '🚀', color: '#3B82F6', earned_at: '2023-06-15', rarity: 'rare' as const },
-      { id: '2', name: 'Top Performer', description: 'Achieved 100%+ ROI', icon: '🏆', color: '#F59E0B', earned_at: '2024-01-20', rarity: 'epic' as const },
-      { id: '3', name: 'Community Leader', description: '100+ helpful reviews', icon: '⭐', color: '#10B981', earned_at: '2024-03-10', rarity: 'legendary' as const },
-    ],
-    achievements: [
-      { id: '1', name: 'First Trade', description: 'Execute your first trade', icon: '📈', progress: 1, max_progress: 1, completed: true, completed_at: '2023-06-16', reward_points: 100 },
-      { id: '2', name: 'Strategy Hunter', description: 'Subscribe to 10 strategies', icon: '🎯', progress: 7, max_progress: 10, completed: false, reward_points: 500 },
-      { id: '3', name: 'Profit Master', description: 'Earn $10,000 in profits', icon: '💰', progress: 8500, max_progress: 10000, completed: false, reward_points: 1000 },
-    ],
-    skill_tags: ['Momentum Trading', 'Risk Management', 'Python', 'Machine Learning'],
-    performance_score: 87,
-    followers_count: 1234,
-    following_count: 56,
-    total_earnings: 45670,
-    strategies_created: 3,
-    strategies_subscribed: 7,
-    is_verified_creator: true,
-    referral_code: 'ALEX2024',
-    referral_earnings: 2340,
-  };
+  // Use profile from auth - TypeScript narrowed by early return
+  const user = profile!;
 
   const userStrategies = mockStrategies.slice(0, 3);
   const favoriteStrategies = mockStrategies.filter(s => favorites.includes(s.id));
@@ -131,7 +121,7 @@ export default function UserProfile() {
   };
 
   const shareProfile = () => {
-    if (navigator.share) {
+    if (navigator.share && user) {
       navigator.share({
         title: `${user.name} on AlgoMart`,
         text: `Check out ${user.name}'s trading strategies on AlgoMart`,
